@@ -34,18 +34,14 @@ public class HbmStore implements Store, AutoCloseable {
     @Override
     public void update(Item item) {
         this.tx(session -> {
-           final Query query = session.createQuery("from Item where id=:id");
-           query.setParameter("id", item.getId());
-           Item itemWithId = (Item) query.getSingleResult();
-           itemWithId.setDone(true);
-           session.update(itemWithId);
-           return null;
+            session.update(item);
+            return true;
         });
     }
 
     @Override
     public void save(Item item) {
-        tx(session -> session.save(item));
+        this.tx(session -> session.save(item));
     }
 
     @Override

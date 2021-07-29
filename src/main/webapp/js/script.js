@@ -24,16 +24,19 @@ function showAll(data) {
     for (let i = 0; i < data.length; i++) {
         let checked = '';
         let disabled = '';
+        let id = data[i].id;
+        let description = data[i].description;
+        let created = data[i].created;
         if (data[i].done) {
             checked = 'checked disabled';
             disabled = '_disabled';
         }
         $('#table').append(
             `<tr id="item${disabled}">
-                        <td class="col-md-1"><input type="checkbox"
-                        onclick="do_done(${data[i].id})" ${checked}></td>
-                        <td class="col-md-4">${data[i].description}</td>
-                        <td class="col-md-2">${data[i].created}</td>
+                        <td class="col-md-1"><input type="checkbox" 
+                        onclick="do_done(${id}, '${description}', '${created}')" ${checked}></td>
+                        <td class="col-md-4">${description}</td>
+                        <td class="col-md-2">${created}</td>
                     </tr>`
         );
     }
@@ -44,22 +47,29 @@ function showNewOnly(data) {
         if (data[i].done) {
             continue;
         }
+        let id = data[i].id;
+        let description = data[i].description;
+        let created = data[i].created;
         $('#table').append(
             `<tr id="item">
-                        <td class="col-md-1"><input type="checkbox" onclick="do_done(${data[i].id})"></td>
-                        <td class="col-md-4">${data[i].description}</td>
-                        <td class="col-md-2">${data[i].created}</td>
+                        <td class="col-md-1"><input type="checkbox" 
+                        onclick="do_done(${id}, '${description}', '${created}')"></td>
+                        <td class="col-md-4">${description}</td>
+                        <td class="col-md-2">${created}</td>
                     </tr>`
         );
     }
 }
 
-function do_done(item_id) {
+function do_done(item_id, description, created) {
     $.ajax({
         type: 'POST',
         url: 'http://localhost:8080/todo/do_done.do',
         data: JSON.stringify({
-            id: item_id
+            id: item_id,
+            description: description,
+            created: created,
+            done: true
         }),
         dataType: 'json'
     }).done(function () {
