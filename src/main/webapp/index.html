@@ -29,11 +29,18 @@
 </div>
 <div class="container">
     <div class="col-md-8">
+        <form>
+            <div class="form-group">
+                <label for="show_all">Показать все</label>
+                <input type="checkbox" class="show_all_items" id="show_all" onclick="trigger()">
+            </div>
+        </form>
         <table id="table">
             <thead>
                 <tr>
-                    <th><input type="checkbox" class="show_all_box" id="show_all" onclick="trigger()"></th>
-                    <th>Показать все</th>
+                    <th class="col-md-1">Выполнена</th>
+                    <th class="col-md-4">Описание</th>
+                    <th class="col-md-2">Дата создания</th>
                 </tr>
             </thead>
         </table>

@@ -30,9 +30,10 @@ function showAll(data) {
         }
         $('#table').append(
             `<tr id="item${disabled}">
-                        <td><input type="checkbox"
+                        <td class="col-md-1"><input type="checkbox"
                         onclick="do_done(${data[i].id})" ${checked}></td>
-                        <td>${data[i].description}</td>
+                        <td class="col-md-4">${data[i].description}</td>
+                        <td class="col-md-2">${data[i].created}</td>
                     </tr>`
         );
     }
@@ -45,8 +46,9 @@ function showNewOnly(data) {
         }
         $('#table').append(
             `<tr id="item">
-                        <td><input type="checkbox" onclick="do_done(${data[i].id})"></td>
-                        <td>${data[i].description}</td>
+                        <td class="col-md-1"><input type="checkbox" onclick="do_done(${data[i].id})"></td>
+                        <td class="col-md-4">${data[i].description}</td>
+                        <td class="col-md-2">${data[i].created}</td>
                     </tr>`
         );
     }
