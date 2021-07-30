@@ -8,7 +8,6 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import ru.job4j.model.Item;
 
-import javax.persistence.Query;
 import java.util.Collection;
 import java.util.function.Function;
 
@@ -34,7 +33,8 @@ public class HbmStore implements Store, AutoCloseable {
     @Override
     public void update(Item item) {
         this.tx(session -> {
-            session.update(item);
+            session.createQuery("update Item set done = true where id=:id")
+                    .setParameter("id", item.getId()).executeUpdate();
             return true;
         });
     }
