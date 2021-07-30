@@ -6,9 +6,12 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.query.Query;
 import ru.job4j.model.Item;
+import ru.job4j.model.User;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 
 public class HbmStore implements Store, AutoCloseable {
@@ -26,8 +29,11 @@ public class HbmStore implements Store, AutoCloseable {
     }
 
     @Override
-    public Collection<Item> findAll() {
-        return this.tx(session -> session.createQuery("from Item order by done, created").list());
+    public Collection<Item> findAll(User user) {
+        return this.tx(session ->
+                session.createQuery("from Item where user=:user order by done, created")
+                        .setParameter("user", user)
+                        .list());
     }
 
     @Override
@@ -36,6 +42,25 @@ public class HbmStore implements Store, AutoCloseable {
             session.createQuery("update Item set done = true where id=:id")
                     .setParameter("id", item.getId()).executeUpdate();
             return true;
+        });
+    }
+
+    @Override
+    public void addUser(User user) {
+        this.tx(session -> session.save(user));
+    }
+
+    @Override
+    public User getUser(User user) {
+        return this.tx(session -> {
+            Query query = session.createQuery("from User where name=:name and password=:password");
+            query.setParameter("name", user.getName());
+            query.setParameter("password", user.getPassword());
+            List<User> users = query.list();
+            if (users.isEmpty()) {
+                return null;
+            }
+            return users.get(0);
         });
     }
 
