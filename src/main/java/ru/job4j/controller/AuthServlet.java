@@ -21,7 +21,7 @@ public class AuthServlet extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
         User user = HbmStore.instOf().getUser(User.of(login, password));
-        if (user != null) {
+        if (user != null && user.getPassword().equals(password)) {
             HttpSession session = req.getSession();
             session.setAttribute("user", user);
             resp.sendRedirect(req.getContextPath());

@@ -7,14 +7,18 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.job4j.model.Item;
 import ru.job4j.model.User;
 
+import javax.persistence.NoResultException;
 import java.util.Collection;
-import java.util.List;
 import java.util.function.Function;
 
 public class HbmStore implements Store, AutoCloseable {
+    private static final Logger LOG = LoggerFactory.getLogger(HbmStore.class.getName());
+
     private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
             .configure().build();
     private final SessionFactory sf = new MetadataSources(registry)
@@ -53,14 +57,15 @@ public class HbmStore implements Store, AutoCloseable {
     @Override
     public User getUser(User user) {
         return this.tx(session -> {
-            Query query = session.createQuery("from User where name=:name and password=:password");
+            Query query = session.createQuery("from User where name=:name");
             query.setParameter("name", user.getName());
-            query.setParameter("password", user.getPassword());
-            List<User> users = query.list();
-            if (users.isEmpty()) {
-                return null;
+            User result = null;
+            try {
+                result = (User) query.getSingleResult();
+            } catch (NoResultException e) {
+                LOG.error("Exception ", e);
             }
-            return users.get(0);
+            return result;
         });
     }
 

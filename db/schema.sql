@@ -8,6 +8,6 @@ CREATE TABLE item (
 
 CREATE TABLE t_user (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(2000),
+    name VARCHAR(2000) UNIQUE,
     password VARCHAR(255)
 );
