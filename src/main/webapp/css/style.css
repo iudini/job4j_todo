@@ -8,6 +8,10 @@ tr {
     border-bottom: #DEDEDE 1px dotted;
 }
 
+#table {
+    margin-bottom: 50px;
+}
+
 tr#item_disabled {
     background-color: lightgreen;
 }

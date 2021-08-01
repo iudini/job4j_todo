@@ -9,6 +9,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.job4j.model.Category;
 import ru.job4j.model.Item;
 import ru.job4j.model.User;
 
@@ -35,9 +36,18 @@ public class HbmStore implements Store, AutoCloseable {
     @Override
     public Collection<Item> findAll(User user) {
         return this.tx(session ->
-                session.createQuery("from Item where user=:user order by done, created")
+                session.createQuery(
+            "select distinct i from Item i join fetch i.categories where i.user=:user"
+                    + " order by i.done, i.created"
+                )
                         .setParameter("user", user)
                         .list());
+    }
+
+    @Override
+    public Collection<Category> findAllCategories() {
+        return this.tx(session -> session.createQuery(
+                "select c from Category c", Category.class).list());
     }
 
     @Override
@@ -70,8 +80,15 @@ public class HbmStore implements Store, AutoCloseable {
     }
 
     @Override
-    public void save(Item item) {
-        this.tx(session -> session.save(item));
+    public void save(Item item, String[] ids) {
+        this.tx(session -> {
+            for (String id : ids) {
+                Category category = session.find(Category.class, Integer.parseInt(id));
+                item.addCategory(category);
+            }
+            session.save(item);
+            return true;
+        });
     }
 
     @Override

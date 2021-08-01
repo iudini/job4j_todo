@@ -2,8 +2,7 @@ package ru.job4j.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import ru.job4j.model.Item;
-import ru.job4j.model.User;
+import ru.job4j.model.Category;
 import ru.job4j.store.HbmStore;
 import ru.job4j.store.Store;
 
@@ -16,30 +15,18 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
-public class IndexServlet extends HttpServlet {
+public class CategoryServlet extends HttpServlet {
     private static final Gson GSON = new GsonBuilder().create();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("application/json; charset=utf-8");
         Store store = HbmStore.instOf();
-        User user = (User) req.getSession().getAttribute("user");
-        Collection<Item> items = store.findAll(user);
+        Collection<Category> categories = store.findAllCategories();
         OutputStream out = resp.getOutputStream();
-        String json = GSON.toJson(items);
+        String json = GSON.toJson(categories);
         out.write(json.getBytes(StandardCharsets.UTF_8));
         out.flush();
         out.close();
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        String[] categoriesId = req.getParameter("categoryIds").split(",");
-        String desc = req.getParameter("description");
-        User user = (User) req.getSession().getAttribute("user");
-        Item item = Item.of(desc, user);
-        HbmStore.instOf().save(item, categoriesId);
-        doGet(req, resp);
     }
 }

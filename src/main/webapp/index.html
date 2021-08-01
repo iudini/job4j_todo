@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="js/script.js"></script>
+    <script src="js/index.js"></script>
     <title>ToDo</title>
 </head>
 <body>
@@ -22,6 +22,9 @@
             <div class="form-group">
                 <label for="description">Описание задачи</label>
                 <input type="text" class="form-control" id="description" placeholder="Введите описание">
+                <label for="cIds">Категория задачи</label>
+                <select class="form-control" name="cIds" id="cIds" multiple>
+                </select>
             </div>
             <button type="button" class="btn btn-primary" onclick="validate()">Submit</button>
         </form>
@@ -40,6 +43,7 @@
                 <tr>
                     <th class="col-md-1">Выполнена</th>
                     <th class="col-md-4">Описание</th>
+                    <th class="col-md-4">Категория</th>
                     <th class="col-md-2">Дата создания</th>
                 </tr>
             </thead>

@@ -11,3 +11,8 @@ CREATE TABLE t_user (
     name VARCHAR(2000) UNIQUE,
     password VARCHAR(255)
 );
+
+CREATE TABLE category (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255)
+);
