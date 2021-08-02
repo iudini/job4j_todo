@@ -6,6 +6,8 @@ TODO список
 Если дело сделано, то его отмечают, как выполненное и оно исчезает из списка.
 Можно посмотреть список всех дел, включая выполненные.
 
+![ScreenShot](./images/7.png)
+![ScreenShot](./images/8.png)
 ![ScreenShot](./images/1.png)
 ![ScreenShot](./images/2.png)
 ![ScreenShot](./images/3.png)
